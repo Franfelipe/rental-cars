@@ -1,39 +1,32 @@
+import { getRepository, Repository } from "typeorm";
 import { Specification } from "../../Entities/Specification";
 import { ICreateSpecificarionDTO, ISpecificationsRepository } from "../ISpeciticationsRepository";
 
 
 class SpecificationsRepository implements ISpecificationsRepository{
+    private repository: Repository<Specification>
 
-    private specifications: Specification[];
     constructor(){
-        this.specifications = []
+        this.repository = getRepository(Specification)
     }
 
-    create({ name, description }: ICreateSpecificarionDTO): void {
-        const specification = new Specification();
-
-        const specificationAlreadyExists = this.findByName(name);
-
-        if(specificationAlreadyExists){
-            throw new Error('Specification alredy exists!');
-        }
-        Object.assign(specification, {
+    async create({ name, description }: ICreateSpecificarionDTO): Promise<void> {
+        const specification = this.repository.create({
             name,
-            description,
-            created_at: new Date()
+            description
         });
 
-        this.specifications.push(specification);
+        await this.repository.save(specification);
     }
     
-    list(): Specification[] {
-        throw new Error("Method not implemented.");
+    async list(): Promise<Specification[]> {
+        const specifications = await this.repository.find();
+
+        return specifications;
     }
 
-    findByName(name: string): Specification {
-        const specification = this.specifications.find(
-            (specification) => specification.name === name
-            );
+    async findByName(name: string): Promise<Specification> {
+        const specification = this.repository.findOne({ name });
 
         return specification;
     } 
