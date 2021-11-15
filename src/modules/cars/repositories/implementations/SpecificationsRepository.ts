@@ -29,7 +29,7 @@ class SpecificationsRepository implements ISpecificationsRepository{
         const specification = this.repository.findOne({ name });
 
         return specification;
-    } 
+    }
 
 }
 

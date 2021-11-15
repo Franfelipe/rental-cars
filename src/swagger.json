@@ -1,7 +1,7 @@
 {
     "openapi":"3.0.0",
     "info":{
-        "title":"Rentalx Documentation",
+        "title":"Rentx Documentation",
         "description":"Just a test with swagger",
         "version":"1.0.0",
         "contact":{
@@ -71,6 +71,71 @@
                             }
                         }
                     }
+                }
+            }
+        },
+        "/categories/import":{
+            "post":{
+                "tags":["Category"],
+                "summary": "Upload a new categories",
+                "description": "Upload a new categories",
+                "requestBody":{
+                    "content":{
+                        "multipart/form-data":{
+                            "schema":{
+                                "type":"obecjt",
+                                "properties":{
+                                    "file":{
+                                        "type":"string",
+                                        "format":"binary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "201":{
+                        "description":"Created"
+                    }
+                }
+            }
+        },
+        "/specifications":{
+            "post":{
+                "tags":["Specification"],
+                "summary":"Create Specification",
+                "description":"Create a new Specification",
+                "requestBody":{
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "$ref": "#/definitions/Specification"
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "201":{
+                        "descriptio": "Created"
+
+                    },
+                    "500":{
+                        "description":"Specification already exists"
+                    }
+                }
+            }
+        }
+    },
+    "definitions":{
+        "Specification":{
+            "type":"object",
+            "properties":{
+                "name":{
+                    "type":"string"
+                },
+                "description":{
+                    "type":"string"
                 }
             }
         }
