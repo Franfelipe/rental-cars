@@ -1,16 +1,18 @@
 import { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken"
-import { User } from "../modules/accounts/Entities/User";
+
+import { AppError } from "../errors/AppError";
 import { UsersRepository } from "../modules/accounts/repositories/implementations/UsersRepository";
 
 interface IPayload {
     sub: string;
 }
+
 export async function ensureAuthenticate(request: Request, response: Response, next: NextFunction) {
     const authHeader = request.headers.authorization;
 
     if(!authHeader){
-        throw new Error("Token missing");
+        throw new AppError("Token missing", 401);
     }
 
     const [, token] = authHeader.split(" ");
@@ -21,13 +23,14 @@ export async function ensureAuthenticate(request: Request, response: Response, n
         const userRespository = new UsersRepository();
 
         const user = await userRespository.findById(user_id);
-        
+
         if(!user){
-            throw new Error("User not found");
+            throw new AppError("User not found", 401);
         }
 
         next()
     }catch{
-        throw new Error("Invalid token");
+        // console.log("teste")
+        throw new AppError("Invalid token", 401);
     }
 }
