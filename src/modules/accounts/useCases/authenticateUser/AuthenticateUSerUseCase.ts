@@ -33,7 +33,7 @@ class AuthenticateUserUseCase{
             throw new AppError("Email or password incorrect!", 401);
         }
 
-        const verifyPassword = compare(password, user.password);
+        const verifyPassword = await compare(password, user.password);
 
         if(!verifyPassword){
             throw new AppError("Email or password incorrect!", 401);
